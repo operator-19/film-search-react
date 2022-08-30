@@ -1,25 +1,78 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from 'react'
+import MovieCard from "./MovieCard";
+import './App.css'
 
-function App() {
+import SearchIcon from "./search.svg";
+
+
+const API_URL = 'https://www.omdbapi.com/?apikey=d64b3c15'
+
+const movie1 = {
+  "Title": "Amazing Spiderman Syndrome",
+  "Year": "2012",
+  "imdbID": "tt2586634",
+  "Type": "movie",
+  "Poster": "N/A"
+}
+
+const App = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    searchMovies({API_URL});
+  }, []);
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    // or you can send data to backend
+  };
+
+  const handleKeypress = e => {
+      //it triggers by pressing the enter key
+    if (e.keyCode === 13) {
+      handleSubmit();
+    }
+  };
+
+
+
+  const searchMovies = async (title) => {
+    const response = await fetch(`${API_URL}&s=${title}`);
+    const data = await response.json();
+    setMovies(data.Search);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <h1>MovieLand</h1>
+
+      <div className="search">
+        <input
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search for movies"
+        />
+        <img
+          src={SearchIcon}
+          alt="search"
+          onClick={() => searchMovies(searchTerm)}
+        />
+      </div>
+
+      {movies?.length > 0 ? (
+        <div className="container">
+          {movies.map((movie, index) => (
+            <MovieCard movie={movie} />
+          ))}
+        </div>
+      ) : (
+        <div className="empty">
+          <h2>Please use search bar</h2>
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default App;
