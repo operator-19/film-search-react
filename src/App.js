@@ -5,7 +5,7 @@ import './App.css'
 import SearchIcon from "./search.svg";
 
 
-const API_URL = 'https://www.omdbapi.com/?apikey=d64b3c15'
+const API_URL = 'http://www.omdbapi.com/?apikey=d64b3c15'
 
 const movie1 = {
   "Title": "Amazing Spiderman Syndrome",
